@@ -26,6 +26,21 @@ class TennisGame1
       @player1.points == @player2.points
     end
 
+
+    def advantage_scoring?
+      @player1.points >= 4 or @player2.points >= 4
+    end
+
+
+    def game_won?
+      advantage_scoring? && (@player1.points - @player2.points).abs > 1
+    end
+
+
+    def lead_player
+      @player1.points > @player2.points ? @player1 : @player2
+    end
+
   end
 
   attr_reader :official
@@ -63,24 +78,25 @@ class TennisGame1
 
   def score
     if official.tie?
+
       {
           0 => 'Love-All',
           1 => 'Fifteen-All',
           2 => 'Thirty-All',
       }.fetch(player1_points, 'Deuce')
-    elsif player1_points >= 4 or player2_points >= 4
-      minus_result = player1_points - player2_points
-      if minus_result==1
-        'Advantage ' + player1_name
-      elsif minus_result == -1
-        'Advantage ' + player2_name
-      elsif minus_result >= 2
-        'Win for ' + player1_name
+
+    elsif official.advantage_scoring?
+
+      if official.game_won?
+        "Win for #{official.lead_player.name}"
       else
-        'Win for ' + player2_name
+        "Advantage #{official.lead_player.name}"
       end
+
     else
+
       "#{points_to_score player1_points}-#{points_to_score player2_points}"
+
     end
   end
 
