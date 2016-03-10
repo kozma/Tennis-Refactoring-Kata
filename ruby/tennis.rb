@@ -13,7 +13,7 @@ class TennisGame1
     def score!
       @points += 1
     end
-    
+
   end
 
   def initialize(player1_name, player2_name)
@@ -42,12 +42,9 @@ class TennisGame1
 
 
   def won_point(player_name)
-    if player_name == player1_name
-      @players.first.score!
-    else
-      @players.last.score!
-    end
+    @players.select { |player| player.name == player_name }.first.score!
   end
+
 
   def score
     result = ''
