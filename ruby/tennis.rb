@@ -9,15 +9,30 @@ class TennisGame1
       @points = 0
     end
 
-
     def score!
       @points += 1
     end
 
   end
 
+  class Official
+
+    def initialize(player1, player2)
+      @player1 = player1
+      @player2 = player2
+    end
+
+    def tie?
+      @player1.points == @player2.points
+    end
+
+  end
+
+  attr_reader :official
+
   def initialize(player1_name, player2_name)
     @players = [Player.new(player1_name), Player.new(player2_name)]
+    @official = Official.new(*@players)
   end
 
 
@@ -47,7 +62,7 @@ class TennisGame1
 
 
   def score
-    if player1_points == player2_points
+    if official.tie?
       {
           0 => 'Love-All',
           1 => 'Fifteen-All',
