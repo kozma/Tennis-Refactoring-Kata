@@ -51,26 +51,6 @@ class TennisGame1
   end
 
 
-  def player1_name
-    @players.first.name
-  end
-
-
-  def player2_name
-    @players.last.name
-  end
-
-
-  def player1_points
-    @players.first.points
-  end
-
-
-  def player2_points
-    @players.last.points
-  end
-
-
   def won_point(player_name)
     @players.select { |player| player.name == player_name }.first.score!
   end
@@ -83,7 +63,7 @@ class TennisGame1
           0 => 'Love-All',
           1 => 'Fifteen-All',
           2 => 'Thirty-All',
-      }.fetch(player1_points, 'Deuce')
+      }.fetch(official.lead_player.points, 'Deuce')
 
     elsif official.advantage_scoring?
 
