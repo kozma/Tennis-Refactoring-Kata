@@ -22,6 +22,7 @@ class TennisGame1
       @player2 = player2
     end
 
+
     def tie?
       @player1.points == @player2.points
     end
@@ -56,10 +57,71 @@ class TennisGame1
 
   end
 
-  attr_reader :official
+  class RingGirl
+
+    def initialize(official)
+      @official = official
+    end
+
+    def score
+
+      if official.tie?
+
+        tie_score
+
+      elsif official.advantage_scoring?
+
+        advantage_score
+
+      else
+
+        midgame_score
+
+      end
+
+    end
+
+    private
+
+    attr_reader :official
+
+    def tie_score
+      tie_points = official.lead_player.points
+
+      if tie_points > 2
+        'Deuce'
+      else
+        "#{points_to_score tie_points}-All"
+      end
+
+    end
+
+
+    def points_to_score(score)
+      %w(Love Fifteen Thirty Forty)[score]
+    end
+
+
+    def midgame_score
+      "#{points_to_score official.players.first.points}-#{points_to_score official.players.last.points}"
+    end
+
+
+    def advantage_score
+      "#{advantage_text} #{official.lead_player.name}"
+    end
+
+
+    def advantage_text
+      official.game_won? ? 'Win for' : 'Advantage'
+    end
+
+  end
+
 
   def initialize(player1_name, player2_name)
     @official = Official.new(Player.new(player1_name), Player.new(player2_name))
+    @ring_girl = RingGirl.new(@official)
   end
 
 
@@ -67,39 +129,15 @@ class TennisGame1
     official.point_won player_name
   end
 
-
   def score
-    if official.tie?
-
-      {
-          0 => 'Love-All',
-          1 => 'Fifteen-All',
-          2 => 'Thirty-All',
-      }.fetch(official.lead_player.points, 'Deuce')
-
-    elsif official.advantage_scoring?
-
-      if official.game_won?
-        "Win for #{official.lead_player.name}"
-      else
-        "Advantage #{official.lead_player.name}"
-      end
-
-    else
-
-      "#{points_to_score official.players.first.points}-#{points_to_score official.players.last.points}"
-
-    end
+    ring_girl.score
   end
 
-  def points_to_score(temp_score)
-    {
-        0 => 'Love',
-        1 => 'Fifteen',
-        2 => 'Thirty',
-        3 => 'Forty',
-    }[temp_score]
-  end
+
+  private
+
+  attr_reader :official, :ring_girl
+
 
 end
 
