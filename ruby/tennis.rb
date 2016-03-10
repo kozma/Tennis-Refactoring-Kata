@@ -47,12 +47,14 @@ class TennisGame1
       [@player1, @player2]
     end
 
+
     def point_won(player_name)
-      if @player1.name == player_name
-        @player1.score!
-      else
-        @player2.score!
-      end
+      player_from_name(player_name).score!
+    end
+
+
+    def player_from_name(player_name)
+      @player1.name == player_name ? @player1 : @player2
     end
 
   end
@@ -91,19 +93,19 @@ class TennisGame1
       if tie_points > 2
         'Deuce'
       else
-        "#{points_to_score tie_points}-All"
+        "#{to_score tie_points}-All"
       end
 
     end
 
 
-    def points_to_score(score)
-      %w(Love Fifteen Thirty Forty)[score]
+    def to_score(points)
+      %w(Love Fifteen Thirty Forty)[points]
     end
 
 
     def midgame_score
-      "#{points_to_score official.players.first.points}-#{points_to_score official.players.last.points}"
+      "#{to_score official.players.first.points}-#{to_score official.players.last.points}"
     end
 
 
