@@ -18,11 +18,11 @@ class TennisGame1
 
 
   def score
-    if @p1points == @p2points
+    if equal_scores?
 
       handle_equal
 
-    elsif @p1points>=4 or @p2points>=4
+    elsif four_points_reached?
 
       handle_advantage
 
@@ -34,8 +34,17 @@ class TennisGame1
   end
 
 
-
   protected
+
+
+  def four_points_reached?
+    @p1points>=4 or @p2points>=4
+  end
+
+
+  def equal_scores?
+    @p1points == @p2points
+  end
 
 
   def handle_equal
@@ -81,7 +90,6 @@ class TennisGame1
   def have_winner?
     [@p1points, @p2points].max > 3 && (@p1points - @p2points).abs > 1
   end
-
 
 end
 
