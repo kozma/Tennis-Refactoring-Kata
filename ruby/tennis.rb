@@ -53,16 +53,13 @@ class TennisGame1
 
 
   def handle_advantage
-    minusResult = @p1points-@p2points
-    if (minusResult==1)
-      "Advantage " + @player1_name
-    elsif (minusResult ==-1)
-      "Advantage " + @player2_name
-    elsif (minusResult>=2)
-      "Win for " + @player1_name
+
+    if have_winner?
+      "Win for #{player_in_lead}"
     else
-      "Win for " + @player2_name
+      "Advantage #{player_in_lead}"
     end
+
   end
 
 
@@ -73,6 +70,16 @@ class TennisGame1
         2 => "Thirty",
         3 => "Forty",
     }[score]
+  end
+
+
+  def player_in_lead
+    @p1points > @p2points ? @player1_name : @player2_name
+  end
+
+
+  def have_winner?
+    [@p1points, @p2points].max > 3 && (@p1points - @p2points).abs > 1
   end
 
 
