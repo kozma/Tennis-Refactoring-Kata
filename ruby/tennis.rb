@@ -62,13 +62,17 @@ class TennisGame1
 
 
   def handle_advantage
+    "#{advantage_text} #{player_in_lead}"
+  end
 
-    if have_winner?
-      "Win for #{player_in_lead}"
-    else
-      "Advantage #{player_in_lead}"
-    end
 
+  def advantage_text
+    have_winner? ? 'Win for' : 'Advantage'
+  end
+
+
+  def player_in_lead
+    @p1points > @p2points ? @player1_name : @player2_name
   end
 
 
@@ -79,11 +83,6 @@ class TennisGame1
         2 => "Thirty",
         3 => "Forty",
     }[score]
-  end
-
-
-  def player_in_lead
-    @p1points > @p2points ? @player1_name : @player2_name
   end
 
 
