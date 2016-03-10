@@ -41,18 +41,30 @@ class TennisGame1
       @player1.points > @player2.points ? @player1 : @player2
     end
 
+
+    def players
+      [@player1, @player2]
+    end
+
+    def point_won(player_name)
+      if @player1.name == player_name
+        @player1.score!
+      else
+        @player2.score!
+      end
+    end
+
   end
 
   attr_reader :official
 
   def initialize(player1_name, player2_name)
-    @players = [Player.new(player1_name), Player.new(player2_name)]
-    @official = Official.new(*@players)
+    @official = Official.new(Player.new(player1_name), Player.new(player2_name))
   end
 
 
   def won_point(player_name)
-    @players.select { |player| player.name == player_name }.first.score!
+    official.point_won player_name
   end
 
 
@@ -75,7 +87,7 @@ class TennisGame1
 
     else
 
-      "#{points_to_score player1_points}-#{points_to_score player2_points}"
+      "#{points_to_score official.players.first.points}-#{points_to_score official.players.last.points}"
 
     end
   end
