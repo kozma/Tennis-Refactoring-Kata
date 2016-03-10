@@ -7,6 +7,7 @@ class TennisGame1
     @p2points = 0
   end
 
+
   def won_point(player_name)
     if player_name == @player1_name
       @p1points += 1
@@ -14,6 +15,7 @@ class TennisGame1
       @p2points += 1
     end
   end
+
 
   def score
     if @p1points == @p2points
@@ -46,17 +48,7 @@ class TennisGame1
 
 
   def handle_score
-    result = ""
-    (1...3).each do |i|
-      if i==1
-        temp_score = @p1points
-      else
-        result+="-"
-        temp_score = @p2points
-      end
-      result += score_name(temp_score)
-    end
-    result
+    "#{score_name(@p1points)}-#{score_name(@p2points)}"
   end
 
 
