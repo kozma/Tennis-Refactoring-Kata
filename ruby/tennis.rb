@@ -18,17 +18,17 @@ class TennisGame1
 
 
   def score
-    if equal_scores?
+    if tie?
 
-      handle_equal
+      handle_tie
 
-    elsif four_points_reached?
+    elsif in_endgame?
 
-      handle_advantage
+      handle_endgame
 
     else
 
-      handle_score
+      handle_midgame
 
     end
   end
@@ -37,17 +37,17 @@ class TennisGame1
   protected
 
 
-  def four_points_reached?
+  def in_endgame?
     @p1points>=4 or @p2points>=4
   end
 
 
-  def equal_scores?
+  def tie?
     @p1points == @p2points
   end
 
 
-  def handle_equal
+  def handle_tie
     if @p1points < 3
       "#{score_name(@p1points)}-All"
     else
@@ -56,12 +56,12 @@ class TennisGame1
   end
 
 
-  def handle_score
+  def handle_midgame
     "#{score_name(@p1points)}-#{score_name(@p2points)}"
   end
 
 
-  def handle_advantage
+  def handle_endgame
     "#{advantage_text} #{player_in_lead}"
   end
 
@@ -224,14 +224,14 @@ end
 
 class TennisGame3
   def initialize(player1Name, player2Name)
-    @p1N = player1Name
-    @p2N = player2Name
+    @p1_name = player1Name
+    @p2_name = player2Name
     @p1 = 0
     @p2 = 0
   end
 
   def won_point(n)
-    if n == @p1N
+    if n == @p1_name
       @p1 += 1
     else
       @p2 += 1
@@ -239,17 +239,33 @@ class TennisGame3
   end
 
   def score
-    if (@p1 < 4 and @p2 < 4) and (@p1 + @p2 < 6)
-      p = ["Love", "Fifteen", "Thirty", "Forty"]
-      s = p[@p1]
-      @p1 == @p2 ? s + "-All" : s + "-" + p[@p2]
+    if in_middlegame?
+      s = point_to_score(@p1)
+      equal_scores? ? s + "-All" : s + "-" + point_to_score(@p2)
+    elsif equal_scores?
+      "Deuce"
     else
-      if (@p1 == @p2)
-        "Deuce"
-      else
-        s = @p1 > @p2 ? @p1N : @p2N
-        (@p1-@p2)*(@p1-@p2) == 1 ? "Advantage " + s : "Win for " + s
-      end
+      more_than_one_point_lead? ? "Win for " + player_in_lead : "Advantage " + player_in_lead
     end
+  end
+
+  def point_to_score(point)
+    %w(Love Fifteen Thirty Forty)[point]
+  end
+
+  def more_than_one_point_lead?
+    (@p1-@p2)*(@p1-@p2) > 1
+  end
+
+  def player_in_lead
+    @p1 > @p2 ? @p1_name : @p2_name
+  end
+
+  def equal_scores?
+    @p1 == @p2
+  end
+
+  def in_middlegame?
+    @p1 < 4 and @p2 < 4 and @p1 + @p2 < 6
   end
 end
