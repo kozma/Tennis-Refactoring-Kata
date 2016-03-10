@@ -4,3 +4,4 @@
 /cpp/run.tests
 /ocaml/_build
 /ocaml/*.native
+/.project
