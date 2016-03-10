@@ -1,46 +1,80 @@
 class TennisGame1
 
-  def initialize(player1_name, player2_name)
-    @player1_name = player1_name
-    @player2_name = player2_name
-    @p1points = 0
-    @p2points = 0
+  class Player
+
+    attr_reader :name, :points
+
+    def initialize(name)
+      @name = name
+      @points = 0
+    end
+
+
+    def score!
+      @points += 1
+    end
+    
   end
 
+  def initialize(player1_name, player2_name)
+    @players = [Player.new(player1_name), Player.new(player2_name)]
+  end
+
+
+  def player1_name
+    @players.first.name
+  end
+
+
+  def player2_name
+    @players.last.name
+  end
+
+
+  def player1_points
+    @players.first.points
+  end
+
+
+  def player2_points
+    @players.last.points
+  end
+
+
   def won_point(player_name)
-    if player_name == @player1_name
-      @p1points += 1
+    if player_name == player1_name
+      @players.first.score!
     else
-      @p2points += 1
+      @players.last.score!
     end
   end
 
   def score
     result = ''
-    if @p1points == @p2points
+    if player1_points == player2_points
       result = {
           0 => 'Love-All',
           1 => 'Fifteen-All',
           2 => 'Thirty-All',
-      }.fetch(@p1points, 'Deuce')
-    elsif @p1points >= 4 or @p2points >= 4
-      minus_result = @p1points - @p2points
+      }.fetch(player1_points, 'Deuce')
+    elsif player1_points >= 4 or player2_points >= 4
+      minus_result = player1_points - player2_points
       if minus_result==1
-        result ='Advantage ' + @player1_name
+        result ='Advantage ' + player1_name
       elsif minus_result == -1
-        result ='Advantage ' + @player2_name
+        result ='Advantage ' + player2_name
       elsif minus_result >= 2
-        result = 'Win for ' + @player1_name
+        result = 'Win for ' + player1_name
       else
-        result ='Win for ' + @player2_name
+        result ='Win for ' + player2_name
       end
     else
       (1...3).each do |i|
         if i == 1
-          temp_score = @p1points
+          temp_score = player1_points
         else
           result+='-'
-          temp_score = @p2points
+          temp_score = player2_points
         end
         result += {
             0 => 'Love',
